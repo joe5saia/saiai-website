@@ -1,0 +1,26 @@
+# https://taskfile.dev
+version: '3'
+
+vars:
+  NODE_BIN: ./node_modules/.bin
+
+tasks:
+  dev:
+    desc: Start the Astro dev server
+    cmd: npm run dev
+
+  build:
+    desc: Build the site for production
+    cmd: npm run build
+
+  preview:
+    desc: Preview the production build locally
+    cmd: npm run preview
+
+  check:
+    desc: Run Astro type checking
+    cmd: npx astro check
+
+  clean:
+    desc: Remove build artifacts
+    cmd: rm -rf dist .astro

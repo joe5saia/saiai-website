@@ -1,0 +1,47 @@
+---
+/**
+ * Case study detail page — dynamic route from content collection (§6.5).
+ *
+ * Renders: summary, client/context, problem, approach, stack, deliverables, outcome, CTA.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const caseStudies = await getCollection('case-studies');
+  return caseStudies.map((cs) => ({
+    params: { slug: cs.id },
+    props: { caseStudy: cs },
+  }));
+}
+
+const { caseStudy } = Astro.props;
+const { Content } = await render(caseStudy);
+---
+
+<BaseLayout
+  title={caseStudy.data.seoTitle ?? `${caseStudy.data.title} — SAIAI`}
+  description={caseStudy.data.seoDescription ?? caseStudy.data.summary}
+>
+  <section class="py-16">
+    <div class="mx-auto max-w-3xl px-4">
+      <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">{caseStudy.data.industry}</p>
+      <h1 class="mt-2 text-3xl font-bold md:text-4xl">{caseStudy.data.title}</h1>
+      <p class="mt-4 text-lg text-text-secondary">{caseStudy.data.summary}</p>
+
+      <article class="prose mt-12 max-w-none">
+        <Content />
+      </article>
+
+      <!-- CTA -->
+      <div class="mt-16 text-center">
+        <a
+          href="/contact/"
+          class="rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors"
+        >
+          Start a Conversation
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

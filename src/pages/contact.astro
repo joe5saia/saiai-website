@@ -1,0 +1,49 @@
+---
+/**
+ * Contact page — collect qualified inbound leads (§6.7, §7.3).
+ *
+ * Required elements: intro, form, email fallback, optional calendar link,
+ * response expectation text.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+---
+
+<BaseLayout title="Contact — SAIAI" description="Get in touch with SAIAI to discuss your project.">
+  <section class="py-16">
+    <div class="mx-auto max-w-3xl px-4">
+      <h1 class="text-3xl font-bold md:text-4xl">Get in Touch</h1>
+      <p class="mt-4 text-text-secondary">
+        Tell us about your project and we'll follow up within one business day.
+      </p>
+
+      <!-- TODO: implement contact form (§7.3 fields) -->
+      <form class="mt-12 space-y-6">
+        <div>
+          <label for="name" class="block text-sm font-medium">Name</label>
+          <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md border border-border px-3 py-2" />
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium">Email</label>
+          <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border border-border px-3 py-2" />
+        </div>
+        <div>
+          <label for="company" class="block text-sm font-medium">Company</label>
+          <input type="text" id="company" name="company" class="mt-1 block w-full rounded-md border border-border px-3 py-2" />
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium">What do you need help with?</label>
+          <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border border-border px-3 py-2"></textarea>
+        </div>
+        <button type="submit" class="rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors">
+          Send Message
+        </button>
+      </form>
+
+      <p class="mt-8 text-sm text-text-secondary">
+        Or email us directly at
+        <a href={`mailto:${siteConfig.email}`} class="text-accent hover:underline">{siteConfig.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+/**
+ * Service detail page — dynamic route from content collection (§6.3).
+ *
+ * Renders: hero, problem statement, what SAIAI does, deliverables,
+ * ideal client, engagement format, FAQ, CTA.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((service) => ({
+    params: { slug: service.id },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+---
+
+<BaseLayout
+  title={service.data.seoTitle ?? `${service.data.title} — SAIAI`}
+  description={service.data.seoDescription ?? service.data.summary}
+>
+  <section class="py-16">
+    <div class="mx-auto max-w-3xl px-4">
+      <h1 class="text-3xl font-bold md:text-4xl">{service.data.heroTitle ?? service.data.title}</h1>
+      <p class="mt-4 text-lg text-text-secondary">{service.data.heroDescription ?? service.data.summary}</p>
+
+      <article class="prose mt-12 max-w-none">
+        <Content />
+      </article>
+
+      <!-- CTA -->
+      <div class="mt-16 text-center">
+        <a
+          href="/contact/"
+          class="rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors"
+        >
+          Get in Touch
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

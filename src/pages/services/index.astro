@@ -1,0 +1,34 @@
+---
+/**
+ * Services index page — make the offer legible (§6.2).
+ *
+ * Lists all services as cards with title, summary, audience, outcomes, and CTA.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Services — SAIAI" description="Engineering, AI, automation, and analytics consulting services from SAIAI.">
+  <section class="py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <h1 class="text-3xl font-bold md:text-4xl">Services</h1>
+      <p class="mt-4 max-w-2xl text-text-secondary">
+        Focused consulting engagements that help you move faster without adding chaos.
+      </p>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => (
+          <a
+            href={`/services/${service.id}/`}
+            class="block rounded-lg border border-border bg-surface p-6 hover:shadow-md transition-shadow"
+          >
+            <h2 class="text-xl font-semibold">{service.data.title}</h2>
+            <p class="mt-2 text-sm text-text-secondary">{service.data.summary}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

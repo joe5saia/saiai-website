@@ -1,0 +1,35 @@
+---
+/**
+ * Case studies index — social proof (§6.4).
+ *
+ * Lists case study cards with title, industry, summary, tags, outcome, and link.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const caseStudies = (await getCollection('case-studies')).filter((cs) => cs.data.published);
+---
+
+<BaseLayout title="Case Studies — SAIAI" description="See how SAIAI has helped businesses improve engineering execution and apply AI.">
+  <section class="py-16">
+    <div class="mx-auto max-w-6xl px-4">
+      <h1 class="text-3xl font-bold md:text-4xl">Case Studies</h1>
+      <p class="mt-4 max-w-2xl text-text-secondary">
+        Real outcomes from real engagements.
+      </p>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-2">
+        {caseStudies.map((cs) => (
+          <a
+            href={`/case-studies/${cs.id}/`}
+            class="block rounded-lg border border-border bg-surface p-6 hover:shadow-md transition-shadow"
+          >
+            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">{cs.data.industry}</p>
+            <h2 class="mt-2 text-xl font-semibold">{cs.data.title}</h2>
+            <p class="mt-2 text-sm text-text-secondary">{cs.data.summary}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
