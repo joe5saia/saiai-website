@@ -1,5 +1,5 @@
 # https://taskfile.dev
-version: '3'
+version: "3"
 
 vars:
   NODE_BIN: ./node_modules/.bin
@@ -20,6 +20,18 @@ tasks:
   check:
     desc: Run Astro type checking
     cmd: npx astro check
+
+  test:
+    desc: Run unit tests
+    cmd: npm run test
+
+  format:
+    desc: Format the codebase with Prettier
+    cmd: npm run format
+
+  format-check:
+    desc: Check formatting with Prettier
+    cmd: npm run format:check
 
   clean:
     desc: Remove build artifacts

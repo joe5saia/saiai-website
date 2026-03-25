@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import ButtonLink from "../ui/ButtonLink.astro";
+import Container from "../ui/Container.astro";
+import SectionIntro from "../ui/SectionIntro.astro";
+import ServiceCard from "../ui/ServiceCard.astro";
+
+/**
+ * Homepage services grid.
+ */
+interface Props {
+  services: CollectionEntry<"services">[];
+}
+
+const { services } = Astro.props as Props;
+---
+
+<section class="py-18 md:py-22">
+  <Container>
+    <SectionIntro
+      description="Short, focused engagements that reduce delivery noise, ship practical systems, and leave a usable operating model behind."
+      eyebrow="Services"
+      title="Focused offers for teams with a concrete constraint to solve"
+    />
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {services.map((service) => <ServiceCard service={service} />)}
+    </div>
+
+    <div class="mt-8 flex justify-start">
+      <ButtonLink
+        analyticsEvent="cta_click"
+        analyticsLocation="services-section"
+        href="/services/"
+        variant="secondary"
+      >
+        View all services
+      </ButtonLink>
+    </div>
+  </Container>
+</section>

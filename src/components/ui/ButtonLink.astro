@@ -1,0 +1,73 @@
+---
+/**
+ * Reusable CTA link styles for primary, secondary, and ghost actions.
+ */
+interface Props {
+  analyticsEvent?: string;
+  analyticsLabel?: string;
+  analyticsLocation?: string;
+  arrow?: boolean;
+  class?: string;
+  external?: boolean;
+  href: string;
+  size?: "sm" | "md";
+  variant?: "ghost" | "primary" | "secondary";
+}
+
+const {
+  analyticsEvent,
+  analyticsLabel,
+  analyticsLocation,
+  arrow = false,
+  class: className,
+  external = /^https?:\/\//.test(Astro.props.href),
+  href,
+  size = "md",
+  variant = "primary",
+} = Astro.props as Props;
+
+const baseClasses =
+  "inline-flex items-center justify-center gap-2 rounded-full border font-semibold transition duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+const sizeClasses = {
+  md: "px-5 py-3 text-sm md:text-base",
+  sm: "px-4 py-2 text-sm",
+};
+const variantClasses = {
+  primary:
+    "border-accent bg-accent text-white shadow-[0_14px_30px_rgba(21,94,239,0.16)] hover:border-accent-hover hover:bg-accent-hover",
+  secondary:
+    "border-border bg-white/70 text-text-primary hover:border-accent hover:text-accent",
+  ghost:
+    "border-transparent bg-transparent px-0 py-0 text-text-primary hover:text-accent",
+};
+---
+
+<a
+  class:list={[
+    baseClasses,
+    sizeClasses[size],
+    variantClasses[variant],
+    className,
+  ]}
+  data-analytics-event={analyticsEvent}
+  data-analytics-label={analyticsLabel}
+  data-analytics-location={analyticsLocation}
+  href={href}
+  rel={external ? "noopener noreferrer" : undefined}
+  target={external ? "_blank" : undefined}
+>
+  <slot />
+  {
+    arrow && (
+      <svg aria-hidden="true" class="h-4 w-4" fill="none" viewBox="0 0 24 24">
+        <path
+          d="M7 17 17 7M9 7h8v8"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.7"
+        />
+      </svg>
+    )
+  }
+</a>

@@ -5,45 +5,97 @@
  * Required elements: intro, form, email fallback, optional calendar link,
  * response expectation text.
  */
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { siteConfig } from '../config/site';
+import { getCollection } from "astro:content";
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ButtonLink from "../components/ui/ButtonLink.astro";
+import ContactForm from "../components/ui/ContactForm.astro";
+import Container from "../components/ui/Container.astro";
+import SectionIntro from "../components/ui/SectionIntro.astro";
+import { siteConfig } from "../config/site";
+import { sortServices } from "../lib/collections";
+import {
+  buildBreadcrumbStructuredData,
+  buildProfessionalServiceStructuredData,
+} from "../lib/structuredData";
+
+const services = sortServices(await getCollection("services"));
+const selectedService = Astro.url.searchParams.get("service") || "";
 ---
 
-<BaseLayout title="Contact — SAIAI" description="Get in touch with SAIAI to discuss your project.">
-  <section class="py-16">
-    <div class="mx-auto max-w-3xl px-4">
-      <h1 class="text-3xl font-bold md:text-4xl">Get in Touch</h1>
-      <p class="mt-4 text-text-secondary">
-        Tell us about your project and we'll follow up within one business day.
-      </p>
+<BaseLayout
+  description="Get in touch with SAIAI to discuss your project."
+  structuredData={[
+    buildBreadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact/" },
+    ]),
+    buildProfessionalServiceStructuredData(),
+  ]}
+  title="Contact | SAIAI"
+>
+  <section class="py-20 md:py-24">
+    <Container>
+      <div class="grid gap-8 lg:grid-cols-[0.9fr,1.1fr]">
+        <div>
+          <SectionIntro
+            description="Share enough detail for a first pass on fit, urgency, and the likely engagement shape. SAIAI will reply within one business day."
+            eyebrow="Contact"
+            title="Start the conversation"
+          />
 
-      <!-- TODO: implement contact form (§7.3 fields) -->
-      <form class="mt-12 space-y-6">
-        <div>
-          <label for="name" class="block text-sm font-medium">Name</label>
-          <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md border border-border px-3 py-2" />
-        </div>
-        <div>
-          <label for="email" class="block text-sm font-medium">Email</label>
-          <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border border-border px-3 py-2" />
-        </div>
-        <div>
-          <label for="company" class="block text-sm font-medium">Company</label>
-          <input type="text" id="company" name="company" class="mt-1 block w-full rounded-md border border-border px-3 py-2" />
-        </div>
-        <div>
-          <label for="message" class="block text-sm font-medium">What do you need help with?</label>
-          <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border border-border px-3 py-2"></textarea>
-        </div>
-        <button type="submit" class="rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors">
-          Send Message
-        </button>
-      </form>
+          <div class="panel mt-8 space-y-5">
+            <div>
+              <p class="eyebrow">Direct email</p>
+              <a
+                class="mt-3 inline-block text-lg font-semibold text-text-primary transition hover:text-accent"
+                data-analytics-event="email_click"
+                data-analytics-location="contact-page"
+                href={`mailto:${siteConfig.email}`}
+              >
+                {siteConfig.email}
+              </a>
+            </div>
 
-      <p class="mt-8 text-sm text-text-secondary">
-        Or email us directly at
-        <a href={`mailto:${siteConfig.email}`} class="text-accent hover:underline">{siteConfig.email}</a>.
-      </p>
-    </div>
+            {
+              siteConfig.primaryCta.href !== "/contact/" && (
+                <div class="border-t border-border pt-5">
+                  <p class="eyebrow">Prefer a call?</p>
+                  <p class="mt-3 text-sm leading-6 text-text-secondary">
+                    If the situation is already well understood, you can go
+                    straight to a call.
+                  </p>
+                  <div class="mt-4">
+                    <ButtonLink
+                      analyticsEvent={siteConfig.primaryCta.analyticsEvent}
+                      analyticsLocation="contact-page"
+                      href={siteConfig.primaryCta.href}
+                      size="sm"
+                    >
+                      {siteConfig.primaryCta.label}
+                    </ButtonLink>
+                  </div>
+                </div>
+              )
+            }
+
+            <div class="border-t border-border pt-5">
+              <p class="eyebrow">What helps</p>
+              <p class="mt-3 text-sm leading-6 text-text-secondary">
+                Include the business problem, relevant systems, urgency, and
+                whether you think this is strategy, implementation, or both.
+                That makes the first response much more useful.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <ContactForm
+          formEndpoint={siteConfig.formEndpoint}
+          selectedService={selectedService}
+          serviceOptions={services.map((service) => service.data.title)}
+        />
+      </div>
+    </Container>
   </section>
 </BaseLayout>

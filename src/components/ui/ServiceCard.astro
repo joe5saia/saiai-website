@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import { buildContactPath } from "../../lib/forms";
+import ButtonLink from "./ButtonLink.astro";
+
+/**
+ * Card used for service listings on the homepage and services index.
+ */
+interface Props {
+  compact?: boolean;
+  service: CollectionEntry<"services">;
+}
+
+const { compact = false, service } = Astro.props as Props;
+const keyOutcomes = service.data.outcomes.slice(0, compact ? 2 : 3);
+---
+
+<article class="panel flex h-full flex-col justify-between">
+  <div>
+    <p class="eyebrow">{service.data.audience}</p>
+    <h3 class="mt-4 text-2xl font-semibold tracking-tight text-text-primary">
+      {service.data.title}
+    </h3>
+    <p class="mt-4 text-base leading-7 text-text-secondary">
+      {service.data.summary}
+    </p>
+  </div>
+
+  <div class="mt-8 space-y-5">
+    {
+      keyOutcomes.length > 0 && (
+        <ul class="space-y-3 text-sm leading-6 text-text-secondary">
+          {keyOutcomes.map((outcome) => (
+            <li class="flex gap-3">
+              <span
+                aria-hidden="true"
+                class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
+              />
+              <span>{outcome}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <div
+      class="flex flex-col gap-3 border-t border-border pt-5 text-sm text-text-secondary"
+    >
+      <span>Typical duration: {service.data.timeline}</span>
+      <div class="flex flex-wrap gap-3">
+        <ButtonLink
+          analyticsEvent="service_card_click"
+          analyticsLabel={service.data.title}
+          analyticsLocation="service-card"
+          arrow={true}
+          href={`/services/${service.id}/`}
+          size="sm"
+        >
+          View service
+        </ButtonLink>
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLabel={service.data.title}
+          analyticsLocation="service-card"
+          href={buildContactPath(service.data.title)}
+          size="sm"
+          variant="ghost"
+        >
+          Discuss fit
+        </ButtonLink>
+      </div>
+    </div>
+  </div>
+</article>

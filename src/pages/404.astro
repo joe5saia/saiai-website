@@ -2,15 +2,49 @@
 /**
  * Custom 404 page (§11.9).
  */
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ButtonLink from "../components/ui/ButtonLink.astro";
+import Container from "../components/ui/Container.astro";
 ---
 
-<BaseLayout title="Page Not Found — SAIAI" description="The page you're looking for doesn't exist.">
-  <section class="flex flex-col items-center justify-center py-32 text-center">
-    <h1 class="text-6xl font-bold text-text-secondary">404</h1>
-    <p class="mt-4 text-lg text-text-secondary">The page you're looking for doesn't exist.</p>
-    <a href="/" class="mt-8 rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors">
-      Go Home
-    </a>
+<BaseLayout
+  description="The page you're looking for doesn't exist."
+  noIndex={true}
+  title="Page Not Found | SAIAI"
+>
+  <section class="py-28 md:py-36">
+    <Container size="narrow">
+      <div class="panel text-center">
+        <p class="eyebrow">404</p>
+        <h1
+          class="mt-4 text-5xl font-semibold tracking-tight text-text-primary md:text-6xl"
+        >
+          The page you were looking for is not here.
+        </h1>
+        <p
+          class="mx-auto mt-5 max-w-xl text-base leading-7 text-text-secondary"
+        >
+          The link may be outdated or the page may have moved. Start from the
+          homepage or head to the services page to continue.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <ButtonLink
+            analyticsEvent="cta_click"
+            analyticsLocation="404"
+            href="/"
+          >
+            Go home
+          </ButtonLink>
+          <ButtonLink
+            analyticsEvent="cta_click"
+            analyticsLocation="404"
+            href="/services/"
+            variant="secondary"
+          >
+            View services
+          </ButtonLink>
+        </div>
+      </div>
+    </Container>
   </section>
 </BaseLayout>

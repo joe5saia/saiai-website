@@ -1,0 +1,38 @@
+---
+/**
+ * Lightweight breadcrumb navigation for detail pages.
+ */
+interface BreadcrumbItem {
+  href?: string;
+  label: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props as Props;
+---
+
+<nav aria-label="Breadcrumb">
+  <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary">
+    {
+      items.map((item, index) => (
+        <>
+          <li>
+            {item.href ? (
+              <a class="transition hover:text-accent" href={item.href}>
+                {item.label}
+              </a>
+            ) : (
+              <span aria-current="page" class="text-text-primary">
+                {item.label}
+              </span>
+            )}
+          </li>
+          {index < items.length - 1 && <li aria-hidden="true">/</li>}
+        </>
+      ))
+    }
+  </ol>
+</nav>

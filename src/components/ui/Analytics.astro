@@ -1,0 +1,92 @@
+---
+import { siteConfig } from "../../config/site";
+import { getAnalyticsConfig } from "../../lib/analytics";
+
+/**
+ * Minimal analytics bootstrap for GA4 plus custom event helpers.
+ */
+interface Props {
+  pageEvent?: {
+    detail?: Record<string, string>;
+    name: string;
+  };
+}
+
+const { pageEvent } = Astro.props as Props;
+const analytics = getAnalyticsConfig(siteConfig.gaId);
+const analyticsBootstrapScript =
+  analytics.isEnabled && analytics.measurementId
+    ? `
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+  window.dataLayer.push(arguments);
+}
+window.gtag = window.gtag || gtag;
+gtag('js', new Date());
+gtag('config', ${JSON.stringify(analytics.measurementId)}, { anonymize_ip: true });
+`
+    : "";
+
+const trackerScript = `
+window.saiaiTrack = window.saiaiTrack || function saiaiTrack(eventName, detail = {}) {
+  if (window.gtag) {
+    window.gtag('event', eventName, detail);
+  }
+};
+
+document.addEventListener(
+  'click',
+  (event) => {
+    const clickableTarget =
+      event.target instanceof Element
+        ? event.target.closest('[data-analytics-event]')
+        : null;
+
+    if (!clickableTarget) {
+      return;
+    }
+
+    const detail = {};
+    const href = clickableTarget.getAttribute('href');
+
+    if (clickableTarget.dataset.analyticsLabel) {
+      detail.label = clickableTarget.dataset.analyticsLabel;
+    }
+
+    if (clickableTarget.dataset.analyticsLocation) {
+      detail.location = clickableTarget.dataset.analyticsLocation;
+    }
+
+    if (href) {
+      detail.destination = href;
+    }
+
+    window.saiaiTrack(clickableTarget.dataset.analyticsEvent, detail);
+  },
+  { passive: true },
+);
+
+const pageEvent = ${JSON.stringify(pageEvent ?? null)};
+
+if (pageEvent?.name) {
+  window.addEventListener('load', () => {
+    window.saiaiTrack(pageEvent.name, pageEvent.detail || {});
+  });
+}
+`;
+---
+
+{
+  analytics.isEnabled && analytics.measurementId && (
+    <>
+      <script
+        is:inline
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${analytics.measurementId}`}
+      />
+      <script is:inline set:html={analyticsBootstrapScript} />
+    </>
+  )
+}
+
+<script is:inline set:html={trackerScript} />

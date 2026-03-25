@@ -2,14 +2,93 @@
 /**
  * Privacy policy page (§5.1).
  */
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/ui/Container.astro";
+import { buildBreadcrumbStructuredData } from "../lib/structuredData";
 ---
 
-<BaseLayout title="Privacy Policy — SAIAI" description="SAIAI privacy policy.">
-  <section class="py-16">
-    <div class="mx-auto max-w-3xl px-4 prose">
-      <h1>Privacy Policy</h1>
-      <p><!-- TODO: privacy policy copy --></p>
-    </div>
+<BaseLayout
+  description="SAIAI privacy policy."
+  structuredData={[
+    buildBreadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Privacy", path: "/privacy/" },
+    ]),
+  ]}
+  title="Privacy Policy | SAIAI"
+>
+  <section class="py-20 md:py-24">
+    <Container size="narrow">
+      <div class="rich-text panel">
+        <p class="eyebrow">Privacy</p>
+        <h1
+          class="mt-4 text-4xl font-semibold tracking-tight text-text-primary"
+        >
+          Privacy Policy
+        </h1>
+        <p>
+          SAIAI collects only the information needed to respond to inbound
+          inquiries, understand how the site is being used, and improve the
+          quality of the consulting lead flow.
+        </p>
+
+        <h2>Information collected</h2>
+        <p>
+          When you use the contact form, SAIAI may collect your name, email
+          address, company, role, website, selected service, budget range,
+          timeline, and the project details you submit. Basic analytics data
+          such as page views, referral sources, and CTA interactions may also be
+          collected.
+        </p>
+
+        <h2>How information is used</h2>
+        <ul>
+          <li>
+            To respond to your inquiry and evaluate fit for a consulting
+            engagement
+          </li>
+          <li>To understand which pages and calls to action are performing</li>
+          <li>
+            To maintain records of business inquiries and follow-up
+            communication
+          </li>
+        </ul>
+
+        <h2>Analytics</h2>
+        <p>
+          If analytics are enabled on this site, they are used to measure page
+          views, CTA clicks, and contact-form interactions. The goal is to
+          understand demand and improve the site, not to build unnecessary
+          personal profiles.
+        </p>
+
+        <h2>Third-party services</h2>
+        <p>
+          Contact submissions may be processed through an external form endpoint
+          or automation service chosen by SAIAI. Those providers receive only
+          the data necessary to deliver the lead-routing workflow.
+        </p>
+
+        <h2>Data retention</h2>
+        <p>
+          Inquiry data is retained only as long as needed for business
+          communication, recordkeeping, and reasonable follow-up. Information is
+          not sold.
+        </p>
+
+        <h2>Your choices</h2>
+        <p>
+          You can contact <a href="mailto:hello@saiai.dev">hello@saiai.dev</a> to
+          request updates or deletion of information previously submitted through
+          the site.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          This policy may be updated as the site evolves. Material changes will
+          be reflected on this page.
+        </p>
+      </div>
+    </Container>
   </section>
 </BaseLayout>

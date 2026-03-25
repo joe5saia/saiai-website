@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ButtonLink from "../components/ui/ButtonLink.astro";
+import Container from "../components/ui/Container.astro";
+import { siteConfig } from "../config/site";
+---
+
+<BaseLayout
+  description="Thanks for contacting SAIAI."
+  noIndex={true}
+  title="Thank You | SAIAI"
+>
+  <section class="py-24 md:py-32">
+    <Container size="narrow">
+      <div class="panel text-center">
+        <p class="eyebrow">Inquiry received</p>
+        <h1
+          class="mt-4 text-4xl font-semibold tracking-tight text-text-primary md:text-5xl"
+        >
+          Thanks. SAIAI will follow up shortly.
+        </h1>
+        <p
+          class="mx-auto mt-5 max-w-2xl text-base leading-7 text-text-secondary"
+        >
+          Expect a response within one business day. If the situation is
+          time-sensitive, you can also email{" "}
+          <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          {
+            siteConfig.primaryCta.href !== "/contact/" && (
+              <ButtonLink
+                analyticsEvent={siteConfig.primaryCta.analyticsEvent}
+                analyticsLocation="thank-you"
+                href={siteConfig.primaryCta.href}
+              >
+                {siteConfig.primaryCta.label}
+              </ButtonLink>
+            )
+          }
+          <ButtonLink
+            analyticsEvent="cta_click"
+            analyticsLocation="thank-you"
+            href="/services/"
+            variant="secondary"
+          >
+            Review services
+          </ButtonLink>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

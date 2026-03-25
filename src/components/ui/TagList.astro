@@ -1,0 +1,31 @@
+---
+/**
+ * Compact list of tags or systems used across cards and content pages.
+ */
+interface Props {
+  class?: string;
+  items: string[];
+  tone?: "accent" | "default";
+}
+
+const { class: className, items, tone = "default" } = Astro.props as Props;
+---
+
+{
+  items.length > 0 && (
+    <ul class:list={["flex flex-wrap gap-2", className]}>
+      {items.map((item) => (
+        <li
+          class:list={[
+            "rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-[0.12em]",
+            tone === "accent"
+              ? "border-accent/25 bg-accent-soft text-accent"
+              : "border-border bg-white/75 text-text-secondary",
+          ]}
+        >
+          {item}
+        </li>
+      ))}
+    </ul>
+  )
+}

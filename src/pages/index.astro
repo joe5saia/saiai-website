@@ -1,47 +1,64 @@
 ---
-/**
- * Homepage — orient, qualify, and convert (§6.1).
- *
- * Sections (to be implemented):
- *   1. Hero
- *   2. Proof / credibility strip
- *   3. Services overview
- *   4. Selected case study teaser
- *   5. Engagement model / process
- *   6. Founder credibility section
- *   7. FAQ or objections section
- *   8. Final CTA
- */
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { siteConfig } from '../config/site';
+import { getCollection } from "astro:content";
+
+import CaseStudyHighlightSection from "../components/sections/CaseStudyHighlightSection.astro";
+import FAQSection from "../components/sections/FAQSection.astro";
+import FinalCTASection from "../components/sections/FinalCTASection.astro";
+import FounderSection from "../components/sections/FounderSection.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import ProcessSection from "../components/sections/ProcessSection.astro";
+import ProofStrip from "../components/sections/ProofStrip.astro";
+import ServicesOverviewSection from "../components/sections/ServicesOverviewSection.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getFeaturedCaseStudy, getFeaturedServices } from "../lib/collections";
+import {
+  buildProfessionalServiceStructuredData,
+  buildWebSiteStructuredData,
+} from "../lib/structuredData";
+
+const services = await getCollection("services");
+const caseStudies = await getCollection("case-studies");
+const featuredServices = getFeaturedServices(services).slice(0, 4);
+const featuredCaseStudy = getFeaturedCaseStudy(caseStudies);
+
+const faqItems = [
+  {
+    question: "Is SAIAI doing strategy, implementation, or both?",
+    answer:
+      "Both. SAIAI is most useful when a team needs clear technical direction and someone who can also help ship the work or get the system operating cleanly.",
+  },
+  {
+    question: "What kinds of companies are a fit?",
+    answer:
+      "The typical fit is a founder, operator, or technical leader with a concrete delivery, automation, analytics, or AI problem that does not justify a large agency or full-time hire yet.",
+  },
+  {
+    question: "Do engagements have to be long-term?",
+    answer:
+      "No. Some work is best handled in a short sprint while other situations benefit from part-time embedded leadership over a few months. The engagement shape follows the problem.",
+  },
+  {
+    question: "How technical does the client team need to be?",
+    answer:
+      "Not very. SAIAI works with both technical and non-technical stakeholders, translating technical decisions into business terms when needed.",
+  },
+];
 ---
 
-<BaseLayout>
-  <!-- Hero -->
-  <section class="py-24 md:py-32 text-center">
-    <div class="mx-auto max-w-3xl px-4">
-      <h1 class="text-4xl font-bold tracking-tight md:text-5xl">
-        Applied AI and engineering systems for teams that need results.
-      </h1>
-      <p class="mt-6 text-lg text-text-secondary">
-        {siteConfig.description}
-      </p>
-      <div class="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-        <a
-          href={siteConfig.calendarUrl}
-          class="rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors"
-        >
-          Book Intro Call
-        </a>
-        <a
-          href="/services/"
-          class="rounded-md border border-border px-6 py-3 font-medium text-text-primary hover:bg-surface transition-colors"
-        >
-          Explore Services
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TODO: remaining homepage sections (proof strip, services grid, case study teaser, etc.) -->
+<BaseLayout
+  structuredData={[
+    buildProfessionalServiceStructuredData(),
+    buildWebSiteStructuredData(),
+  ]}
+>
+  <HeroSection />
+  <ProofStrip />
+  <ServicesOverviewSection services={featuredServices} />
+  <CaseStudyHighlightSection caseStudy={featuredCaseStudy} />
+  <ProcessSection />
+  <FounderSection />
+  <FAQSection items={faqItems} />
+  <FinalCTASection
+    title="Need a technical partner who can reduce chaos and move the work forward?"
+  />
 </BaseLayout>

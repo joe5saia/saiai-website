@@ -4,17 +4,173 @@
  *
  * Sections: What SAIAI is, How SAIAI works, Founder, Why clients hire SAIAI, CTA.
  */
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ButtonLink from "../components/ui/ButtonLink.astro";
+import Container from "../components/ui/Container.astro";
+import FinalCTASection from "../components/sections/FinalCTASection.astro";
+import SectionIntro from "../components/ui/SectionIntro.astro";
+import { siteConfig } from "../config/site";
+import {
+  buildBreadcrumbStructuredData,
+  buildFounderStructuredData,
+  buildProfessionalServiceStructuredData,
+} from "../lib/structuredData";
+
+const workingPrinciples = [
+  {
+    title: "Start with the operating constraint",
+    body: "SAIAI begins with the delivery bottleneck, manual process, analytics gap, or AI use case that is currently creating drag.",
+  },
+  {
+    title: "Keep the work narrow enough to move",
+    body: "Engagements are scoped to produce momentum quickly instead of generating broad decks and long discovery cycles.",
+  },
+  {
+    title: "Leave behind a usable system",
+    body: "Recommendations, implementation, and handoff are all designed so the client team can keep operating without dependency.",
+  },
+];
+
+const reasonsClientsHire = [
+  "A founder or operator needs senior technical judgment without making a full-time leadership hire",
+  "A team has an AI idea but needs a practical way to turn it into shipped workflow value",
+  "Manual operational work is slowing the business down and needs automation or an internal tool",
+  "Growth systems and website instrumentation need to move from guesswork to measurable signals",
+];
 ---
 
-<BaseLayout title="About — SAIAI" description="Learn about SAIAI and its founder, Joe Saia.">
-  <section class="py-16">
-    <div class="mx-auto max-w-3xl px-4">
-      <h1 class="text-3xl font-bold md:text-4xl">About SAIAI</h1>
-      <p class="mt-4 text-lg text-text-secondary">
-        <!-- TODO: about page copy -->
-        SAIAI is a consulting practice focused on applied AI and engineering execution.
-      </p>
-    </div>
+<BaseLayout
+  description="Learn about SAIAI and how the consulting practice works."
+  structuredData={[
+    buildBreadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "About", path: "/about/" },
+    ]),
+    buildProfessionalServiceStructuredData(),
+    buildFounderStructuredData(),
+  ]}
+  title="About | SAIAI"
+>
+  <section class="py-20 md:py-24">
+    <Container>
+      <SectionIntro
+        description="SAIAI is a company-first consulting practice built for teams that need technical work to become clearer, faster, and more useful to the business."
+        eyebrow="About"
+        title="A focused consulting practice for execution-heavy engineering and AI work"
+      />
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="about-page"
+          href="/contact/"
+        >
+          Get in touch
+        </ButtonLink>
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="about-page"
+          href="/services/"
+          variant="secondary"
+        >
+          Explore services
+        </ButtonLink>
+      </div>
+    </Container>
   </section>
+
+  <section class="pb-16 md:pb-20">
+    <Container>
+      <div class="grid gap-6 lg:grid-cols-[1.1fr,0.9fr]">
+        <article class="panel">
+          <p class="eyebrow">What SAIAI is</p>
+          <div class="mt-6 space-y-5 text-base leading-7 text-text-secondary">
+            <p>
+              SAIAI helps growing businesses improve engineering execution,
+              automate manual work, instrument growth systems, and ship
+              practical AI-enabled workflows. The work is technical, but the
+              framing stays grounded in business outcomes.
+            </p>
+            <p>
+              This is not a broad agency marketplace and it is not a personal
+              biography site. SAIAI exists to make the offer legible: clear
+              technical help for concrete operational and delivery problems.
+            </p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <p class="eyebrow">Founder</p>
+          <h2
+            class="mt-4 text-2xl font-semibold tracking-tight text-text-primary"
+          >
+            {siteConfig.founder.name}
+          </h2>
+          <p
+            class="mt-2 text-sm font-medium uppercase tracking-[0.12em] text-text-secondary"
+          >
+            {siteConfig.founder.title}
+          </p>
+          <div class="mt-5 space-y-4 text-base leading-7 text-text-secondary">
+            <p>
+              SAIAI is led directly by {siteConfig.founder.name}, who works with
+              clients on scoping, decision-making, implementation, and handoff.
+            </p>
+            <p>{siteConfig.founder.summary}</p>
+            <p>
+              Broader background and professional history live on{" "}
+              <a href={siteConfig.founder.personalSite}>Joe’s personal site</a>.
+              This site stays focused on how SAIAI helps clients.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <section class="mt-6">
+        <SectionIntro
+          description="A small set of principles keeps the work practical and keeps the engagement from drifting into noise."
+          eyebrow="How SAIAI works"
+          title="A delivery model built for clarity"
+        />
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-3">
+          {
+            workingPrinciples.map((principle) => (
+              <article class="panel">
+                <h3 class="text-2xl font-semibold tracking-tight text-text-primary">
+                  {principle.title}
+                </h3>
+                <p class="mt-4 text-base leading-7 text-text-secondary">
+                  {principle.body}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="mt-6">
+        <div class="panel">
+          <p class="eyebrow">Why clients hire SAIAI</p>
+          <ul class="mt-6 grid gap-4 md:grid-cols-2">
+            {
+              reasonsClientsHire.map((reason) => (
+                <li class="flex gap-3 text-base leading-7 text-text-secondary">
+                  <span
+                    aria-hidden="true"
+                    class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
+                  />
+                  <span>{reason}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+    </Container>
+  </section>
+
+  <FinalCTASection
+    title="If the work needs to get less chaotic and more measurable, start here."
+  />
 </BaseLayout>

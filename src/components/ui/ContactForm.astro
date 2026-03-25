@@ -1,0 +1,312 @@
+---
+import {
+  budgetBandOptions,
+  buildContactFormConfig,
+  leadMetadataFieldNames,
+  timelineOptions,
+} from "../../lib/forms";
+
+/**
+ * Lead-capture form with hidden attribution fields and a no-backend preview
+ * fallback for local and preview environments.
+ */
+interface Props {
+  class?: string;
+  formEndpoint?: string;
+  selectedService?: string;
+  serviceOptions: string[];
+}
+
+const {
+  class: className,
+  formEndpoint,
+  selectedService = "",
+  serviceOptions,
+} = Astro.props as Props;
+const formConfig = buildContactFormConfig({ formEndpoint });
+---
+
+<form
+  action={formConfig.action}
+  class:list={["panel space-y-6", className]}
+  data-contact-form="true"
+  data-form-endpoint={formEndpoint || ""}
+  data-has-external-endpoint={String(formConfig.hasExternalEndpoint)}
+  data-source-system={formConfig.sourceSystem}
+  data-thank-you-path={formConfig.thankYouPath}
+  method={formConfig.method}
+>
+  <div class="grid gap-6 md:grid-cols-2">
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary">Name</span>
+      <input class="input-field" name="name" required type="text" />
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary">Email</span>
+      <input class="input-field" name="email" required type="email" />
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary">Company</span>
+      <input class="input-field" name="company" required type="text" />
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary"
+        >Role / title</span
+      >
+      <input class="input-field" name="role" type="text" />
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary"
+        >Website URL</span
+      >
+      <input
+        class="input-field"
+        name="website"
+        placeholder="https://"
+        type="url"
+      />
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary"
+        >Service of interest</span
+      >
+      <select class="input-field" name="service">
+        <option value="">Select a service</option>
+        {
+          serviceOptions.map((serviceOption) => (
+            <option
+              selected={selectedService === serviceOption}
+              value={serviceOption}
+            >
+              {serviceOption}
+            </option>
+          ))
+        }
+      </select>
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary"
+        >Budget band</span
+      >
+      <select class="input-field" name="budgetBand">
+        <option value="">Select a budget range</option>
+        {
+          budgetBandOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))
+        }
+      </select>
+    </label>
+
+    <label class="space-y-2">
+      <span class="block text-sm font-semibold text-text-primary">Timeline</span
+      >
+      <select class="input-field" name="timeline">
+        <option value="">Select a timeline</option>
+        {
+          timelineOptions.map((option) => (
+            <option value={option}>{option}</option>
+          ))
+        }
+      </select>
+    </label>
+  </div>
+
+  <label class="space-y-2">
+    <span class="block text-sm font-semibold text-text-primary"
+      >How did you hear about SAIAI?</span
+    >
+    <input class="input-field" name="referralSource" type="text" />
+  </label>
+
+  <label class="space-y-2">
+    <span class="block text-sm font-semibold text-text-primary"
+      >What do you need help with?</span
+    >
+    <textarea class="input-field min-h-36 resize-y" name="message" required
+    ></textarea>
+  </label>
+
+  <div aria-hidden="true" class="hidden">
+    <label>
+      <span>Leave this field empty</span>
+      <input
+        autocomplete="off"
+        name="companyWebsite"
+        tabindex="-1"
+        type="text"
+      />
+    </label>
+  </div>
+
+  {
+    leadMetadataFieldNames.map((fieldName) => (
+      <input name={fieldName} type="hidden" value="" />
+    ))
+  }
+
+  <div
+    class="flex flex-col gap-4 border-t border-border pt-6 md:flex-row md:items-center md:justify-between"
+  >
+    <p class="max-w-2xl text-sm leading-6 text-text-secondary">
+      Share enough context for a first-pass qualification and SAIAI will follow
+      up within one business day.
+    </p>
+    <button
+      class="inline-flex items-center justify-center rounded-full border border-accent bg-accent px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(21,94,239,0.16)] transition hover:border-accent-hover hover:bg-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      data-analytics-event="contact_form_submit"
+      data-analytics-location="contact-form"
+      type="submit"
+    >
+      Send inquiry
+    </button>
+  </div>
+
+  <p
+    aria-live="polite"
+    class="text-sm text-text-secondary"
+    data-contact-form-status
+  >
+  </p>
+</form>
+
+<script is:inline>
+  const contactForm = document.querySelector('[data-contact-form="true"]');
+
+  if (contactForm instanceof HTMLFormElement) {
+    const statusNode = contactForm.querySelector("[data-contact-form-status]");
+    const sourceSystem =
+      contactForm.dataset.sourceSystem || "saiai.dev-contact-form";
+    const thankYouPath = contactForm.dataset.thankYouPath || "/thank-you/";
+    const hasExternalEndpoint =
+      contactForm.dataset.hasExternalEndpoint === "true";
+    const firstLandingPageKey = "saiai:first-landing-page";
+    const firstLandingPage =
+      sessionStorage.getItem(firstLandingPageKey) ||
+      `${window.location.pathname}${window.location.search}`;
+
+    sessionStorage.setItem(firstLandingPageKey, firstLandingPage);
+
+    const hiddenFields = new Map(
+      Array.from(contactForm.querySelectorAll('input[type="hidden"]')).map(
+        (input) => [input.name, input],
+      ),
+    );
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+
+    const leadMetadata = {
+      firstLandingPage,
+      pagePath: window.location.pathname,
+      referrer: document.referrer,
+      sourceSystem,
+      timestamp: new Date().toISOString(),
+      utmCampaign: urlSearchParams.get("utm_campaign") || "",
+      utmMedium: urlSearchParams.get("utm_medium") || "",
+      utmSource: urlSearchParams.get("utm_source") || "",
+    };
+
+    Object.entries(leadMetadata).forEach(([key, value]) => {
+      const field = hiddenFields.get(key);
+
+      if (field instanceof HTMLInputElement) {
+        field.value = value;
+      }
+    });
+
+    let trackedFormStart = false;
+
+    const trackFormStart = () => {
+      if (trackedFormStart) {
+        return;
+      }
+
+      trackedFormStart = true;
+      window.saiaiTrack?.("contact_form_start", {
+        location: "contact-form",
+        page_path: window.location.pathname,
+      });
+    };
+
+    contactForm.addEventListener(
+      "focusin",
+      (event) => {
+        if (
+          event.target instanceof HTMLInputElement ||
+          event.target instanceof HTMLTextAreaElement ||
+          event.target instanceof HTMLSelectElement
+        ) {
+          trackFormStart();
+        }
+      },
+      { passive: true },
+    );
+
+    contactForm.addEventListener("submit", async (event) => {
+      const honeypot = contactForm.elements.namedItem("companyWebsite");
+
+      if (honeypot instanceof HTMLInputElement && honeypot.value) {
+        event.preventDefault();
+        return;
+      }
+
+      if (!hasExternalEndpoint) {
+        event.preventDefault();
+        sessionStorage.setItem(
+          "saiai:last-submission",
+          JSON.stringify({
+            service:
+              contactForm.elements.namedItem("service") instanceof
+              HTMLSelectElement
+                ? contactForm.elements.namedItem("service").value
+                : "",
+            timestamp: new Date().toISOString(),
+          }),
+        );
+        window.location.assign(thankYouPath);
+        return;
+      }
+
+      event.preventDefault();
+
+      if (statusNode instanceof HTMLElement) {
+        statusNode.textContent = "Sending your inquiry...";
+      }
+
+      try {
+        const response = await fetch(contactForm.action, {
+          body: new FormData(contactForm),
+          method: "POST",
+        });
+
+        if (!response.ok && response.type !== "opaque") {
+          throw new Error("Lead submission failed.");
+        }
+
+        sessionStorage.setItem(
+          "saiai:last-submission",
+          JSON.stringify({
+            service:
+              contactForm.elements.namedItem("service") instanceof
+              HTMLSelectElement
+                ? contactForm.elements.namedItem("service").value
+                : "",
+            timestamp: new Date().toISOString(),
+          }),
+        );
+        window.location.assign(thankYouPath);
+      } catch (error) {
+        if (statusNode instanceof HTMLElement) {
+          statusNode.textContent =
+            "There was a problem sending your inquiry. Email hello@saiai.dev and SAIAI will reply directly.";
+        }
+      }
+    });
+  }
+</script>

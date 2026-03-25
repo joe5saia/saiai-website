@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import ButtonLink from "../ui/ButtonLink.astro";
+import Container from "../ui/Container.astro";
+import SectionIntro from "../ui/SectionIntro.astro";
+import TagList from "../ui/TagList.astro";
+
+/**
+ * Homepage featured case study section.
+ */
+interface Props {
+  caseStudy?: CollectionEntry<"case-studies">;
+}
+
+const { caseStudy } = Astro.props as Props;
+---
+
+{
+  caseStudy && (
+    <section class="py-18 md:py-22">
+      <Container>
+        <div class="grid gap-8 lg:grid-cols-[0.9fr,1.1fr]">
+          <SectionIntro
+            description="Selected proof for how SAIAI approaches launch-focused technical work with clear delivery boundaries."
+            eyebrow="Case study"
+            title="A recent engagement"
+          />
+
+          <article class="panel space-y-6">
+            <div>
+              <p class="eyebrow">{caseStudy.data.industry}</p>
+              <h3 class="mt-4 text-3xl font-semibold tracking-tight text-text-primary">
+                {caseStudy.data.title}
+              </h3>
+              <p class="mt-4 text-base leading-7 text-text-secondary">
+                {caseStudy.data.summary}
+              </p>
+            </div>
+
+            <div class="grid gap-6 border-y border-border py-6 md:grid-cols-2">
+              <div>
+                <p class="eyebrow">Problem</p>
+                <p class="mt-3 text-sm leading-6 text-text-secondary">
+                  {caseStudy.data.problem}
+                </p>
+              </div>
+              <div>
+                <p class="eyebrow">Approach</p>
+                <p class="mt-3 text-sm leading-6 text-text-secondary">
+                  {caseStudy.data.approach}
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <p class="eyebrow">Outcome</p>
+              <ul class="space-y-3 text-sm leading-6 text-text-secondary">
+                {caseStudy.data.outcomes.map((outcome) => (
+                  <li class="flex gap-3">
+                    <span
+                      aria-hidden="true"
+                      class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
+                    />
+                    <span>{outcome}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <TagList items={caseStudy.data.stack} tone="accent" />
+
+            <ButtonLink
+              analyticsEvent="case_study_click"
+              analyticsLabel={caseStudy.data.title}
+              analyticsLocation="featured-case-study"
+              arrow={true}
+              href={`/case-studies/${caseStudy.id}/`}
+            >
+              Read the full case study
+            </ButtonLink>
+          </article>
+        </div>
+      </Container>
+    </section>
+  )
+}

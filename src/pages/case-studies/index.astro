@@ -4,32 +4,68 @@
  *
  * Lists case study cards with title, industry, summary, tags, outcome, and link.
  */
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ButtonLink from "../../components/ui/ButtonLink.astro";
+import CaseStudyCard from "../../components/ui/CaseStudyCard.astro";
+import Container from "../../components/ui/Container.astro";
+import FinalCTASection from "../../components/sections/FinalCTASection.astro";
+import SectionIntro from "../../components/ui/SectionIntro.astro";
+import { getCollection } from "astro:content";
+import { getPublishedCaseStudies } from "../../lib/collections";
+import { buildBreadcrumbStructuredData } from "../../lib/structuredData";
 
-const caseStudies = (await getCollection('case-studies')).filter((cs) => cs.data.published);
+const caseStudies = getPublishedCaseStudies(
+  await getCollection("case-studies"),
+);
 ---
 
-<BaseLayout title="Case Studies — SAIAI" description="See how SAIAI has helped businesses improve engineering execution and apply AI.">
-  <section class="py-16">
-    <div class="mx-auto max-w-6xl px-4">
-      <h1 class="text-3xl font-bold md:text-4xl">Case Studies</h1>
-      <p class="mt-4 max-w-2xl text-text-secondary">
-        Real outcomes from real engagements.
-      </p>
+<BaseLayout
+  description="See how SAIAI has helped businesses improve engineering execution and apply AI."
+  structuredData={[
+    buildBreadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Case Studies", path: "/case-studies/" },
+    ]),
+  ]}
+  title="Case Studies | SAIAI"
+>
+  <section class="py-20 md:py-24">
+    <Container>
+      <SectionIntro
+        description="Selected engagements that show how SAIAI translates technical work into usable delivery systems and lead-generating infrastructure."
+        eyebrow="Case studies"
+        title="Proof through focused delivery work"
+      />
 
-      <div class="mt-12 grid gap-8 md:grid-cols-2">
-        {caseStudies.map((cs) => (
-          <a
-            href={`/case-studies/${cs.id}/`}
-            class="block rounded-lg border border-border bg-surface p-6 hover:shadow-md transition-shadow"
-          >
-            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">{cs.data.industry}</p>
-            <h2 class="mt-2 text-xl font-semibold">{cs.data.title}</h2>
-            <p class="mt-2 text-sm text-text-secondary">{cs.data.summary}</p>
-          </a>
-        ))}
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="case-studies-page"
+          href="/contact/"
+        >
+          Start a conversation
+        </ButtonLink>
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="case-studies-page"
+          href="/services/"
+          variant="secondary"
+        >
+          Explore services
+        </ButtonLink>
       </div>
-    </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        {
+          caseStudies.map((caseStudy) => (
+            <CaseStudyCard caseStudy={caseStudy} />
+          ))
+        }
+      </div>
+    </Container>
   </section>
+
+  <FinalCTASection
+    title="Have a similar delivery or growth systems problem to solve?"
+  />
 </BaseLayout>

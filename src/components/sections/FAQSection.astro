@@ -1,0 +1,37 @@
+---
+import Container from "../ui/Container.astro";
+import FAQItem from "../ui/FAQItem.astro";
+import SectionIntro from "../ui/SectionIntro.astro";
+
+/**
+ * Homepage FAQ and objection handling.
+ */
+interface FAQItemData {
+  answer: string;
+  question: string;
+}
+
+interface Props {
+  items: FAQItemData[];
+}
+
+const { items } = Astro.props as Props;
+---
+
+<section class="py-18 md:py-22">
+  <Container>
+    <SectionIntro
+      description="Short answers to the questions most prospects need resolved before starting a conversation."
+      eyebrow="FAQ"
+      title="Questions that usually come up early"
+    />
+
+    <div class="mt-10 space-y-4">
+      {
+        items.map((item) => (
+          <FAQItem answer={item.answer} question={item.question} />
+        ))
+      }
+    </div>
+  </Container>
+</section>

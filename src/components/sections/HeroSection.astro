@@ -1,0 +1,80 @@
+---
+import ButtonLink from "../ui/ButtonLink.astro";
+import Container from "../ui/Container.astro";
+import { siteConfig } from "../../config/site";
+
+/**
+ * Homepage hero focused on clarity, qualification, and immediate conversion.
+ */
+const engagementHighlights = [
+  {
+    description:
+      "Part-time senior technical leadership for delivery pressure, team design, and AI direction.",
+    title: "Fractional engineering leadership",
+  },
+  {
+    description:
+      "Time-boxed implementation for a practical AI workflow or feature that needs to ship.",
+    title: "AI delivery sprint",
+  },
+  {
+    description:
+      "Operational systems, internal tools, and analytics that reduce manual drag.",
+    title: "Automation and instrumentation",
+  },
+];
+---
+
+<section class="overflow-hidden py-20 md:py-28">
+  <Container class="grid gap-10 lg:grid-cols-[1.2fr,0.8fr] lg:items-end">
+    <div class="max-w-3xl">
+      <p class="eyebrow">Operator-led consulting</p>
+      <h1
+        class="mt-5 text-5xl font-semibold tracking-tight text-text-primary md:text-6xl md:leading-[1.04]"
+      >
+        {siteConfig.tagline}
+      </h1>
+      <p
+        class="mt-6 max-w-2xl text-lg leading-8 text-text-secondary md:text-xl"
+      >
+        {siteConfig.description}
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink
+          analyticsEvent={siteConfig.primaryCta.analyticsEvent}
+          analyticsLocation="hero"
+          href={siteConfig.primaryCta.href}
+        >
+          {siteConfig.primaryCta.label}
+        </ButtonLink>
+        <ButtonLink
+          analyticsEvent={siteConfig.secondaryCta.analyticsEvent}
+          analyticsLocation="hero"
+          href={siteConfig.secondaryCta.href}
+          variant="secondary"
+        >
+          {siteConfig.secondaryCta.label}
+        </ButtonLink>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <p class="eyebrow">What engagements look like</p>
+      <div class="mt-6 space-y-6">
+        {
+          engagementHighlights.map((highlight) => (
+            <div class="border-t border-border pt-4 first:border-t-0 first:pt-0">
+              <h2 class="text-lg font-semibold tracking-tight text-text-primary">
+                {highlight.title}
+              </h2>
+              <p class="mt-2 text-sm leading-6 text-text-secondary">
+                {highlight.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </aside>
+  </Container>
+</section>

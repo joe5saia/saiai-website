@@ -5,10 +5,17 @@
  * Provides <head> metadata, skip-link, Header, <main>, Footer, and global CSS.
  * See design doc §12 (repo structure) and §9.1 (global components).
  */
-import '../styles/global.css';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import { siteConfig } from '../config/site';
+import "../styles/global.css";
+
+import Analytics from "../components/ui/Analytics.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import { siteConfig } from "../config/site";
+import {
+  buildCanonicalUrl,
+  buildRobotsDirective,
+  serializeStructuredData,
+} from "../lib/seo";
 
 interface Props {
   /** Page <title>. Falls back to siteConfig.title. */
@@ -17,15 +24,41 @@ interface Props {
   description?: string;
   /** Canonical URL override. */
   canonical?: string;
+  /** Mark a page as a non-indexable preview or utility page. */
+  noIndex?: boolean;
+  /** Open Graph type. */
+  ogType?: "article" | "website";
+  /** Optional page event for analytics. */
+  pageEvent?: {
+    detail?: Record<string, string>;
+    name: string;
+  };
+  /** Optional JSON-LD payload or payloads. */
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title = siteConfig.title,
   description = siteConfig.description,
   canonical,
+  noIndex = false,
+  ogType = "website",
+  pageEvent,
+  structuredData,
 } = Astro.props;
 
-const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteConfig.url).href;
+const canonicalUrl =
+  canonical ?? buildCanonicalUrl(Astro.url.pathname, siteConfig.url);
+const robotsDirective = buildRobotsDirective(
+  Astro.url,
+  siteConfig.url,
+  noIndex,
+);
+const structuredDataItems = Array.isArray(structuredData)
+  ? structuredData
+  : structuredData
+    ? [structuredData]
+    : [];
 ---
 
 <!doctype html>
@@ -39,9 +72,11 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteConfig.url).hr
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content={robotsDirective} />
+    <meta name="theme-color" content="#f5f3ee" />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
@@ -53,13 +88,24 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteConfig.url).hr
     <meta name="twitter:description" content={description} />
 
     <meta name="generator" content={Astro.generator} />
+
+    {
+      structuredDataItems.map((item) => (
+        <script
+          is:inline
+          set:html={serializeStructuredData(item)}
+          type="application/ld+json"
+        />
+      ))
+    }
   </head>
-  <body class="min-h-screen flex flex-col bg-bg text-text-primary">
+  <body class="flex min-h-screen flex-col bg-bg text-text-primary">
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <Header />
     <main id="main-content" class="flex-1">
       <slot />
     </main>
     <Footer />
+    <Analytics pageEvent={pageEvent} />
   </body>
 </html>

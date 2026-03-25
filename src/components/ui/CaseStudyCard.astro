@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import ButtonLink from "./ButtonLink.astro";
+import TagList from "./TagList.astro";
+
+/**
+ * Card used for case study listings across the site.
+ */
+interface Props {
+  caseStudy: CollectionEntry<"case-studies">;
+}
+
+const { caseStudy } = Astro.props as Props;
+---
+
+<article class="panel flex h-full flex-col justify-between">
+  <div>
+    <p class="eyebrow">{caseStudy.data.industry}</p>
+    <h3 class="mt-4 text-2xl font-semibold tracking-tight text-text-primary">
+      {caseStudy.data.title}
+    </h3>
+    <p class="mt-4 text-base leading-7 text-text-secondary">
+      {caseStudy.data.summary}
+    </p>
+  </div>
+
+  <div class="mt-8 space-y-5">
+    {
+      caseStudy.data.outcomes.length > 0 && (
+        <ul class="space-y-3 text-sm leading-6 text-text-secondary">
+          {caseStudy.data.outcomes.slice(0, 3).map((outcome) => (
+            <li class="flex gap-3">
+              <span
+                aria-hidden="true"
+                class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
+              />
+              <span>{outcome}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <TagList items={caseStudy.data.stack.slice(0, 4)} />
+
+    <ButtonLink
+      analyticsEvent="case_study_click"
+      analyticsLabel={caseStudy.data.title}
+      analyticsLocation="case-study-card"
+      arrow={true}
+      href={`/case-studies/${caseStudy.id}/`}
+      size="sm"
+    >
+      Read case study
+    </ButtonLink>
+  </div>
+</article>

@@ -4,44 +4,176 @@
  *
  * Renders: summary, client/context, problem, approach, stack, deliverables, outcome, CTA.
  */
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import ButtonLink from "../../components/ui/ButtonLink.astro";
+import Container from "../../components/ui/Container.astro";
+import FinalCTASection from "../../components/sections/FinalCTASection.astro";
+import TagList from "../../components/ui/TagList.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import {
+  buildBreadcrumbStructuredData,
+  buildCaseStudyStructuredData,
+} from "../../lib/structuredData";
 
 export async function getStaticPaths() {
-  const caseStudies = await getCollection('case-studies');
+  const caseStudies = await getCollection("case-studies");
   return caseStudies.map((cs) => ({
     params: { slug: cs.id },
     props: { caseStudy: cs },
   }));
 }
 
-const { caseStudy } = Astro.props;
+const { caseStudy } = Astro.props as {
+  caseStudy: CollectionEntry<"case-studies">;
+};
 const { Content } = await render(caseStudy);
 ---
 
 <BaseLayout
-  title={caseStudy.data.seoTitle ?? `${caseStudy.data.title} — SAIAI`}
   description={caseStudy.data.seoDescription ?? caseStudy.data.summary}
+  ogType="article"
+  pageEvent={{
+    name: "case_study_detail_view",
+    detail: {
+      case_study: caseStudy.data.title,
+    },
+  }}
+  structuredData={[
+    buildBreadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Case Studies", path: "/case-studies/" },
+      { name: caseStudy.data.title, path: `/case-studies/${caseStudy.id}/` },
+    ]),
+    buildCaseStudyStructuredData({
+      clientName: caseStudy.data.clientName,
+      summary: caseStudy.data.summary,
+      title: caseStudy.data.title,
+      urlPath: `/case-studies/${caseStudy.id}/`,
+    }),
+  ]}
+  title={caseStudy.data.seoTitle ?? `${caseStudy.data.title} | SAIAI`}
 >
-  <section class="py-16">
-    <div class="mx-auto max-w-3xl px-4">
-      <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">{caseStudy.data.industry}</p>
-      <h1 class="mt-2 text-3xl font-bold md:text-4xl">{caseStudy.data.title}</h1>
-      <p class="mt-4 text-lg text-text-secondary">{caseStudy.data.summary}</p>
+  <section class="py-16 md:py-20">
+    <Container>
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Case Studies", href: "/case-studies/" },
+          { label: caseStudy.data.title },
+        ]}
+      />
 
-      <article class="prose mt-12 max-w-none">
-        <Content />
-      </article>
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
+        <div class="max-w-3xl">
+          <p class="eyebrow">{caseStudy.data.industry}</p>
+          <h1
+            class="mt-4 text-4xl font-semibold tracking-tight text-text-primary md:text-5xl"
+          >
+            {caseStudy.data.title}
+          </h1>
+          <p class="mt-5 text-lg leading-8 text-text-secondary">
+            {caseStudy.data.summary}
+          </p>
 
-      <!-- CTA -->
-      <div class="mt-16 text-center">
-        <a
-          href="/contact/"
-          class="rounded-md bg-accent px-6 py-3 font-medium text-white hover:bg-accent-hover transition-colors"
-        >
-          Start a Conversation
-        </a>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <ButtonLink
+              analyticsEvent="cta_click"
+              analyticsLocation="case-study-hero"
+              href="/contact/"
+            >
+              Start a conversation
+            </ButtonLink>
+            <ButtonLink
+              analyticsEvent="cta_click"
+              analyticsLocation="case-study-hero"
+              href="/services/"
+              variant="secondary"
+            >
+              Explore services
+            </ButtonLink>
+          </div>
+        </div>
+
+        <aside class="panel space-y-5">
+          <div>
+            <p class="eyebrow">Client</p>
+            <p class="mt-3 text-base leading-7 text-text-primary">
+              {caseStudy.data.clientName}
+            </p>
+          </div>
+          <div class="border-t border-border pt-5">
+            <p class="eyebrow">Systems involved</p>
+            <TagList items={caseStudy.data.stack} tone="accent" />
+          </div>
+        </aside>
       </div>
-    </div>
+    </Container>
   </section>
+
+  <section class="pb-16 md:pb-20">
+    <Container>
+      <div class="grid gap-6 lg:grid-cols-2">
+        <article class="panel">
+          <p class="eyebrow">Problem</p>
+          <p class="mt-6 text-base leading-7 text-text-secondary">
+            {caseStudy.data.problem}
+          </p>
+        </article>
+
+        <article class="panel">
+          <p class="eyebrow">Approach</p>
+          <p class="mt-6 text-base leading-7 text-text-secondary">
+            {caseStudy.data.approach}
+          </p>
+        </article>
+
+        <article class="panel">
+          <p class="eyebrow">Deliverables</p>
+          <ul class="mt-6 space-y-4 text-base leading-7 text-text-secondary">
+            {
+              caseStudy.data.deliverables.map((deliverable) => (
+                <li class="flex gap-3">
+                  <span
+                    aria-hidden="true"
+                    class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
+                  />
+                  <span>{deliverable}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <article class="panel">
+          <p class="eyebrow">Outcome</p>
+          <ul class="mt-6 space-y-4 text-base leading-7 text-text-secondary">
+            {
+              caseStudy.data.outcomes.map((outcome) => (
+                <li class="flex gap-3">
+                  <span
+                    aria-hidden="true"
+                    class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
+                  />
+                  <span>{outcome}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+      </div>
+
+      <article class="panel mt-6">
+        <p class="eyebrow">Narrative</p>
+        <div class="rich-text mt-6 max-w-none">
+          <Content />
+        </div>
+      </article>
+    </Container>
+  </section>
+
+  <FinalCTASection
+    description="If your team needs a similar combination of technical execution, launch support, and measurement infrastructure, SAIAI can help scope it."
+    title="Need help building a cleaner delivery and growth system?"
+  />
 </BaseLayout>

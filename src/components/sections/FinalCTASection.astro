@@ -1,0 +1,52 @@
+---
+import ButtonLink from "../ui/ButtonLink.astro";
+import Container from "../ui/Container.astro";
+import { siteConfig } from "../../config/site";
+
+/**
+ * Closing CTA shared by long-form pages.
+ */
+interface Props {
+  description?: string;
+  title: string;
+}
+
+const {
+  description = "If the team needs sharper execution, a practical AI plan, or cleaner operational systems, SAIAI can help scope the next move.",
+  title,
+} = Astro.props as Props;
+---
+
+<section class="py-18 md:py-22">
+  <Container>
+    <div class="panel bg-text-primary text-white">
+      <p class="eyebrow text-white/70">Next step</p>
+      <h2
+        class="mt-4 max-w-3xl text-3xl font-semibold tracking-tight md:text-4xl"
+      >
+        {title}
+      </h2>
+      <p class="mt-5 max-w-2xl text-base leading-7 text-white/70">
+        {description}
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink
+          analyticsEvent={siteConfig.primaryCta.analyticsEvent}
+          analyticsLocation="final-cta"
+          href={siteConfig.primaryCta.href}
+        >
+          {siteConfig.primaryCta.label}
+        </ButtonLink>
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="final-cta"
+          href="/contact/"
+          variant="secondary"
+        >
+          Get in touch
+        </ButtonLink>
+      </div>
+    </div>
+  </Container>
+</section>

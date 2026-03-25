@@ -1,0 +1,42 @@
+---
+/**
+ * Shared section heading block for consistent page rhythm.
+ */
+interface Props {
+  align?: "center" | "left";
+  class?: string;
+  description?: string;
+  eyebrow?: string;
+  title: string;
+}
+
+const {
+  align = "left",
+  class: className,
+  description,
+  eyebrow,
+  title,
+} = Astro.props as Props;
+---
+
+<div
+  class:list={[
+    "max-w-3xl",
+    align === "center" && "mx-auto text-center",
+    className,
+  ]}
+>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h2
+    class="mt-4 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl"
+  >
+    {title}
+  </h2>
+  {
+    description && (
+      <p class="mt-4 text-base leading-7 text-text-secondary md:text-lg">
+        {description}
+      </p>
+    )
+  }
+</div>

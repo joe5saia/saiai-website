@@ -4,31 +4,60 @@
  *
  * Lists all services as cards with title, summary, audience, outcomes, and CTA.
  */
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ButtonLink from "../../components/ui/ButtonLink.astro";
+import Container from "../../components/ui/Container.astro";
+import FinalCTASection from "../../components/sections/FinalCTASection.astro";
+import SectionIntro from "../../components/ui/SectionIntro.astro";
+import ServiceCard from "../../components/ui/ServiceCard.astro";
+import { getCollection } from "astro:content";
+import { sortServices } from "../../lib/collections";
+import { buildBreadcrumbStructuredData } from "../../lib/structuredData";
 
-const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const services = sortServices(await getCollection("services"));
 ---
 
-<BaseLayout title="Services — SAIAI" description="Engineering, AI, automation, and analytics consulting services from SAIAI.">
-  <section class="py-16">
-    <div class="mx-auto max-w-6xl px-4">
-      <h1 class="text-3xl font-bold md:text-4xl">Services</h1>
-      <p class="mt-4 max-w-2xl text-text-secondary">
-        Focused consulting engagements that help you move faster without adding chaos.
-      </p>
+<BaseLayout
+  description="Engineering, AI, automation, and analytics consulting services from SAIAI."
+  structuredData={[
+    buildBreadcrumbStructuredData([
+      { name: "Home", path: "/" },
+      { name: "Services", path: "/services/" },
+    ]),
+  ]}
+  title="Services | SAIAI"
+>
+  <section class="py-20 md:py-24">
+    <Container>
+      <SectionIntro
+        description="SAIAI structures work as focused consulting engagements with clear outcomes, a direct working relationship, and a practical handoff."
+        eyebrow="Services"
+        title="Offers built for execution-heavy technical problems"
+      />
 
-      <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service) => (
-          <a
-            href={`/services/${service.id}/`}
-            class="block rounded-lg border border-border bg-surface p-6 hover:shadow-md transition-shadow"
-          >
-            <h2 class="text-xl font-semibold">{service.data.title}</h2>
-            <p class="mt-2 text-sm text-text-secondary">{service.data.summary}</p>
-          </a>
-        ))}
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="services-page"
+          href="/contact/"
+        >
+          Get in touch
+        </ButtonLink>
+        <ButtonLink
+          analyticsEvent="cta_click"
+          analyticsLocation="services-page"
+          href="/case-studies/"
+          variant="secondary"
+        >
+          View case studies
+        </ButtonLink>
       </div>
-    </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        {services.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </Container>
   </section>
+
+  <FinalCTASection title="Not sure which engagement fits your situation?" />
 </BaseLayout>
