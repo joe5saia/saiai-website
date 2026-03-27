@@ -2,7 +2,7 @@
 /**
  * About page — company explanation with founder credibility (§6.6).
  *
- * Sections: What SAIAI is, How SAIAI works, Founder, Why clients hire SAIAI, CTA.
+ * Sections: What I do, Background, How I work, Audience, CTA.
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ButtonLink from "../components/ui/ButtonLink.astro";
@@ -18,29 +18,33 @@ import {
 
 const workingPrinciples = [
   {
-    title: "Start with the operating constraint",
-    body: "SAIAI begins with the delivery bottleneck, manual process, analytics gap, or AI use case that is currently creating drag.",
+    title: "Start with the real problem",
+    body: "I begin by clarifying the business goal, the constraint, and what success actually looks like before I touch the implementation.",
   },
   {
-    title: "Keep the work narrow enough to move",
-    body: "Engagements are scoped to produce momentum quickly instead of generating broad decks and long discovery cycles.",
+    title: "Keep the scope narrow enough to ship",
+    body: "I prefer focused projects that create momentum quickly instead of long discovery cycles, extra process, or open-ended retainers.",
   },
   {
-    title: "Leave behind a usable system",
-    body: "Recommendations, implementation, and handoff are all designed so the client team can keep operating without dependency.",
+    title: "Leave a system the team can use",
+    body: "I document what changed, how it works, and what should happen next so the handoff is useful instead of ceremonial.",
   },
 ];
 
-const reasonsClientsHire = [
-  "A founder or operator needs senior technical judgment without making a full-time leadership hire",
-  "A team has an AI idea but needs a practical way to turn it into shipped workflow value",
-  "Manual operational work is slowing the business down and needs automation or an internal tool",
-  "Growth systems and website instrumentation need to move from guesswork to measurable signals",
+const audienceGroups = [
+  {
+    title: "Small businesses",
+    body: "Most of my engagements are with small businesses that need a better website, cleaner lead flow, better reporting, or a system that removes manual drag.",
+  },
+  {
+    title: "Startups",
+    body: "I also work with startups when scope is clear and execution speed matters. These projects are usually tightly defined builds, launches, or workflow fixes that need to move quickly.",
+  },
 ];
 ---
 
 <BaseLayout
-  description="Learn about SAIAI and how the consulting practice works."
+  description="Learn how I work, what kinds of projects I take on, and why the practice is built around practical delivery."
   structuredData={[
     buildBreadcrumbStructuredData([
       { name: "Home", path: "/" },
@@ -54,27 +58,31 @@ const reasonsClientsHire = [
   <section class="py-20 md:py-24">
     <Container>
       <SectionIntro
-        description="SAIAI is a company-first consulting practice built for teams that need technical work to become clearer, faster, and more useful to the business."
+        description="I'm a general-purpose technologist with startup experience across zero-to-one builds. Most of my engagements are with small businesses, and I also partner with startups when scope is clear and execution speed matters."
         eyebrow="About"
-        title="A focused consulting practice for execution-heavy engineering and AI work"
+        title="A practical consulting practice built around execution"
       />
 
       <div class="mt-8 flex flex-wrap gap-3">
         <ButtonLink
-          analyticsEvent="cta_click"
+          analyticsEvent={siteConfig.primaryCta.analyticsEvent}
           analyticsLocation="about-page"
-          href="/contact/"
+          href={siteConfig.primaryCta.href}
         >
-          Get in touch
+          {siteConfig.primaryCta.label}
         </ButtonLink>
-        <ButtonLink
-          analyticsEvent="cta_click"
-          analyticsLocation="about-page"
-          href="/services/"
-          variant="secondary"
-        >
-          Explore services
-        </ButtonLink>
+        {
+          siteConfig.hasSchedulingCta && (
+            <ButtonLink
+              analyticsEvent="cta_click"
+              analyticsLocation="about-page"
+              href={siteConfig.secondaryCta.href}
+              variant="secondary"
+            >
+              {siteConfig.secondaryCta.label}
+            </ButtonLink>
+          )
+        }
       </div>
     </Container>
   </section>
@@ -83,24 +91,25 @@ const reasonsClientsHire = [
     <Container>
       <div class="grid gap-6 lg:grid-cols-[1.1fr,0.9fr]">
         <article class="panel">
-          <p class="eyebrow">What SAIAI is</p>
+          <p class="eyebrow">What I do</p>
           <div class="mt-6 space-y-5 text-base leading-7 text-text-secondary">
             <p>
-              SAIAI helps growing businesses improve engineering execution,
-              automate manual work, instrument growth systems, and ship
-              practical AI-enabled workflows. The work is technical, but the
-              framing stays grounded in business outcomes.
+              I work with small businesses and startups to design, build, and
+              launch practical technical systems, including websites, marketing
+              stack implementation, BI foundations, AI workflows, and general
+              engineering projects.
             </p>
             <p>
-              This is not a broad agency marketplace and it is not a personal
-              biography site. SAIAI exists to make the offer legible: clear
-              technical help for concrete operational and delivery problems.
+              I stay hands-on from scoping through build, launch, and handoff.
+              The goal is to leave you with something working and
+              understandable, not a vague plan or a dependency on an ongoing
+              retainer.
             </p>
           </div>
         </article>
 
         <article class="panel">
-          <p class="eyebrow">Founder</p>
+          <p class="eyebrow">Background</p>
           <h2
             class="mt-4 text-2xl font-semibold tracking-tight text-text-primary"
           >
@@ -113,14 +122,19 @@ const reasonsClientsHire = [
           </p>
           <div class="mt-5 space-y-4 text-base leading-7 text-text-secondary">
             <p>
-              SAIAI is led directly by {siteConfig.founder.name}, who works with
-              clients on scoping, decision-making, implementation, and handoff.
+              I'm a general-purpose technologist with zero-to-one startup
+              experience across engineering, product, analytics, and operations
+              work.
             </p>
-            <p>{siteConfig.founder.summary}</p>
             <p>
-              Broader background and professional history live on{" "}
-              <a href={siteConfig.founder.personalSite}>Joe’s personal site</a>.
-              This site stays focused on how SAIAI helps clients.
+              That breadth is useful because most projects do not stay inside
+              one lane. A website launch might need forms and analytics. An AI
+              workflow might need data cleanup and reporting. I'm comfortable
+              carrying work across those seams.
+            </p>
+            <p>
+              Broader background and professional history live on
+              <a href={siteConfig.founder.personalSite}> my personal site</a>.
             </p>
           </div>
         </article>
@@ -128,8 +142,8 @@ const reasonsClientsHire = [
 
       <section class="mt-6">
         <SectionIntro
-          description="A small set of principles keeps the work practical and keeps the engagement from drifting into noise."
-          eyebrow="How SAIAI works"
+          description="A small set of principles keeps the work practical and stops projects from drifting into noise."
+          eyebrow="How I work"
           title="A delivery model built for clarity"
         />
 
@@ -150,27 +164,32 @@ const reasonsClientsHire = [
       </section>
 
       <section class="mt-6">
-        <div class="panel">
-          <p class="eyebrow">Why clients hire SAIAI</p>
-          <ul class="mt-6 grid gap-4 md:grid-cols-2">
-            {
-              reasonsClientsHire.map((reason) => (
-                <li class="flex gap-3 text-base leading-7 text-text-secondary">
-                  <span
-                    aria-hidden="true"
-                    class="mt-2 h-1.5 w-1.5 rounded-full bg-accent"
-                  />
-                  <span>{reason}</span>
-                </li>
-              ))
-            }
-          </ul>
+        <SectionIntro
+          description="The audience split is practical, not exclusive. What matters most is that the scope is clear and the work needs to ship."
+          eyebrow="Who I usually work with"
+          title="Most projects come from two groups"
+        />
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-2">
+          {
+            audienceGroups.map((group) => (
+              <article class="panel">
+                <h3 class="text-2xl font-semibold tracking-tight text-text-primary">
+                  {group.title}
+                </h3>
+                <p class="mt-4 text-base leading-7 text-text-secondary">
+                  {group.body}
+                </p>
+              </article>
+            ))
+          }
         </div>
       </section>
     </Container>
   </section>
 
   <FinalCTASection
-    title="If the work needs to get less chaotic and more measurable, start here."
+    description="If you have a scoped technical project and need it to move, send a short brief and I'll recommend the best next step."
+    title="Need help moving a technical project forward?"
   />
 </BaseLayout>

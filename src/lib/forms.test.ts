@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  budgetBandOptions,
   buildContactFormConfig,
   buildContactPath,
   normalizeInternalPath,
@@ -32,12 +33,21 @@ describe("form helpers", () => {
   });
 
   it("builds contact links with a selected service", () => {
-    expect(buildContactPath("AI Delivery Sprint")).toBe(
-      "/contact/?service=AI+Delivery+Sprint",
+    expect(buildContactPath("AI Workflow & Automation Sprint")).toBe(
+      "/contact/?service=AI+Workflow+%26+Automation+Sprint",
     );
   });
 
   it("normalizes internal paths with a leading slash", () => {
     expect(normalizeInternalPath("thank-you/")).toBe("/thank-you/");
+  });
+
+  it("exposes the updated budget options", () => {
+    expect(budgetBandOptions).toEqual([
+      "Under $2,500",
+      "$2,500 - $5,000",
+      "$5,000 - $10,000",
+      "$10,000+",
+    ]);
   });
 });

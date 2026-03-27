@@ -12,40 +12,80 @@ interface Props {
 }
 
 const {
-  description = "If the team needs sharper execution, a practical AI plan, or cleaner operational systems, SAIAI can help scope the next move.",
+  description = "If you have a technical project that needs to move, send a short brief and I'll recommend the best next step.",
   title,
 } = Astro.props as Props;
+
+const primaryButtonClass =
+  "border-white bg-white text-text-primary shadow-[0_18px_38px_rgba(19,32,51,0.18)] hover:border-white hover:bg-white/92 hover:text-text-primary";
+const secondaryButtonClass =
+  "border-white/18 bg-white/8 text-white hover:border-white/34 hover:bg-white/12 hover:text-white";
 ---
 
 <section class="py-18 md:py-22">
   <Container>
-    <div class="panel bg-text-primary text-white">
-      <p class="eyebrow text-white/70">Next step</p>
-      <h2
-        class="mt-4 max-w-3xl text-3xl font-semibold tracking-tight md:text-4xl"
+    <div
+      class="relative isolate overflow-hidden rounded-[1.75rem] border border-text-primary/10 bg-text-primary px-7 py-8 text-white shadow-[0_28px_80px_rgba(19,32,51,0.16)] md:px-10 md:py-10"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute -right-10 top-0 h-56 w-56 rounded-full bg-white/10 blur-3xl"
       >
-        {title}
-      </h2>
-      <p class="mt-5 max-w-2xl text-base leading-7 text-white/70">
-        {description}
-      </p>
+      </div>
+      <div
+        aria-hidden="true"
+        class="absolute bottom-0 left-24 h-40 w-40 rounded-full bg-accent/30 blur-3xl"
+      >
+      </div>
 
-      <div class="mt-8 flex flex-wrap gap-3">
-        <ButtonLink
-          analyticsEvent={siteConfig.primaryCta.analyticsEvent}
-          analyticsLocation="final-cta"
-          href={siteConfig.primaryCta.href}
-        >
-          {siteConfig.primaryCta.label}
-        </ButtonLink>
-        <ButtonLink
-          analyticsEvent="cta_click"
-          analyticsLocation="final-cta"
-          href="/contact/"
-          variant="secondary"
-        >
-          Get in touch
-        </ButtonLink>
+      <div
+        class="relative grid gap-8 lg:grid-cols-[1.15fr,0.85fr] lg:items-end"
+      >
+        <div class="max-w-3xl">
+          <p class="eyebrow text-white/68">Next step</p>
+          <h2
+            class="mt-4 max-w-3xl text-pretty text-3xl font-semibold tracking-tight md:text-4xl"
+          >
+            {title}
+          </h2>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-white/72">
+            {description}
+          </p>
+        </div>
+
+        <div class="lg:justify-self-end">
+          <div class="flex flex-wrap gap-3 lg:justify-end">
+            <ButtonLink
+              analyticsEvent={siteConfig.primaryCta.analyticsEvent}
+              analyticsLocation="final-cta"
+              href={siteConfig.primaryCta.href}
+              class={primaryButtonClass}
+              variant="secondary"
+            >
+              {siteConfig.primaryCta.label}
+            </ButtonLink>
+            {
+              siteConfig.hasSchedulingCta && (
+                <ButtonLink
+                  analyticsEvent="cta_click"
+                  analyticsLocation="final-cta"
+                  href={siteConfig.secondaryCta.href}
+                  class={secondaryButtonClass}
+                  variant="secondary"
+                >
+                  {siteConfig.secondaryCta.label}
+                </ButtonLink>
+              )
+            }
+          </div>
+
+          <p
+            class="mt-4 max-w-sm text-sm leading-6 text-white/62 lg:ml-auto lg:text-right"
+          >
+            A short note with the project scope, urgency, and systems involved
+            is enough to get started.
+          </p>
+        </div>
       </div>
     </div>
   </Container>

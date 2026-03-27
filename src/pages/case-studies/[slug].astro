@@ -10,6 +10,7 @@ import ButtonLink from "../../components/ui/ButtonLink.astro";
 import Container from "../../components/ui/Container.astro";
 import FinalCTASection from "../../components/sections/FinalCTASection.astro";
 import TagList from "../../components/ui/TagList.astro";
+import { siteConfig } from "../../config/site";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import {
   buildBreadcrumbStructuredData,
@@ -78,20 +79,24 @@ const { Content } = await render(caseStudy);
 
           <div class="mt-8 flex flex-wrap gap-3">
             <ButtonLink
-              analyticsEvent="cta_click"
+              analyticsEvent={siteConfig.primaryCta.analyticsEvent}
               analyticsLocation="case-study-hero"
-              href="/contact/"
+              href={siteConfig.primaryCta.href}
             >
-              Start a conversation
+              {siteConfig.primaryCta.label}
             </ButtonLink>
-            <ButtonLink
-              analyticsEvent="cta_click"
-              analyticsLocation="case-study-hero"
-              href="/services/"
-              variant="secondary"
-            >
-              Explore services
-            </ButtonLink>
+            {
+              siteConfig.hasSchedulingCta && (
+                <ButtonLink
+                  analyticsEvent="cta_click"
+                  analyticsLocation="case-study-hero"
+                  href={siteConfig.secondaryCta.href}
+                  variant="secondary"
+                >
+                  {siteConfig.secondaryCta.label}
+                </ButtonLink>
+              )
+            }
           </div>
         </div>
 
@@ -173,7 +178,7 @@ const { Content } = await render(caseStudy);
   </section>
 
   <FinalCTASection
-    description="If your team needs a similar combination of technical execution, launch support, and measurement infrastructure, SAIAI can help scope it."
+    description="If your team needs a similar combination of technical execution, launch support, and measurement infrastructure, send a short brief and I'll recommend the best next step."
     title="Need help building a cleaner delivery and growth system?"
   />
 </BaseLayout>

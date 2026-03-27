@@ -17,7 +17,7 @@ import { siteConfig } from "../config/site";
         <h1
           class="mt-4 text-4xl font-semibold tracking-tight text-text-primary md:text-5xl"
         >
-          Thanks. SAIAI will follow up shortly.
+          Thanks. I'll follow up shortly.
         </h1>
         <p
           class="mx-auto mt-5 max-w-2xl text-base leading-7 text-text-secondary"
@@ -28,7 +28,7 @@ import { siteConfig } from "../config/site";
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           {
-            siteConfig.primaryCta.href !== "/contact/" && (
+            siteConfig.hasSchedulingCta && (
               <ButtonLink
                 analyticsEvent={siteConfig.primaryCta.analyticsEvent}
                 analyticsLocation="thank-you"
@@ -44,7 +44,7 @@ import { siteConfig } from "../config/site";
             href="/services/"
             variant="secondary"
           >
-            Review services
+            View services
           </ButtonLink>
         </div>
       </div>

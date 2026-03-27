@@ -24,7 +24,7 @@ const selectedService = Astro.url.searchParams.get("service") || "";
 ---
 
 <BaseLayout
-  description="Get in touch with SAIAI to discuss your project."
+  description="Get in touch to discuss your project."
   structuredData={[
     buildBreadcrumbStructuredData([
       { name: "Home", path: "/" },
@@ -39,7 +39,7 @@ const selectedService = Astro.url.searchParams.get("service") || "";
       <div class="grid gap-8 lg:grid-cols-[0.9fr,1.1fr]">
         <div>
           <SectionIntro
-            description="Share enough detail for a first pass on fit, urgency, and the likely engagement shape. SAIAI will reply within one business day."
+            description="Share enough detail for a first pass on fit, urgency, and the likely project shape. I'll reply within one business day."
             eyebrow="Contact"
             title="Start the conversation"
           />
@@ -58,7 +58,7 @@ const selectedService = Astro.url.searchParams.get("service") || "";
             </div>
 
             {
-              siteConfig.primaryCta.href !== "/contact/" && (
+              siteConfig.hasSchedulingCta && (
                 <div class="border-t border-border pt-5">
                   <p class="eyebrow">Prefer a call?</p>
                   <p class="mt-3 text-sm leading-6 text-text-secondary">
@@ -83,8 +83,8 @@ const selectedService = Astro.url.searchParams.get("service") || "";
               <p class="eyebrow">What helps</p>
               <p class="mt-3 text-sm leading-6 text-text-secondary">
                 Include the business problem, relevant systems, urgency, and
-                whether you think this is strategy, implementation, or both.
-                That makes the first response much more useful.
+                what you want to get built or launched. That makes the first
+                response much more useful.
               </p>
             </div>
           </div>

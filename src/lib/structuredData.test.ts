@@ -31,13 +31,13 @@ describe("structured data helpers", () => {
   it("builds service schema with an absolute URL", () => {
     expect(
       buildServiceStructuredData({
-        title: "AI Delivery Sprint",
+        title: "AI Workflow & Automation Sprint",
         description: "Ship a practical AI workflow.",
-        urlPath: "/services/ai-delivery-sprint/",
+        urlPath: "/services/ai-workflow-automation-sprint/",
       }),
     ).toMatchObject({
       "@type": "Service",
-      url: "https://saiai.dev/services/ai-delivery-sprint/",
+      url: "https://saiai.dev/services/ai-workflow-automation-sprint/",
     });
   });
 

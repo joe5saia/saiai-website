@@ -52,10 +52,11 @@ export function buildProfessionalServiceStructuredData() {
     },
     sameAs: Object.values(siteConfig.social).filter(Boolean),
     serviceType: [
-      "Applied AI consulting",
-      "Engineering execution consulting",
-      "Workflow automation",
-      "Growth analytics instrumentation",
+      "Website design and build",
+      "Marketing stack launch support",
+      "BI and reporting foundations",
+      "AI workflow and automation sprint",
+      "Engineering consulting and build support",
     ],
   });
 }

@@ -4,23 +4,18 @@ import Container from "../ui/Container.astro";
 import { siteConfig } from "../../config/site";
 
 /**
- * Homepage hero focused on clarity, qualification, and immediate conversion.
+ * Homepage hero focused on clarity, fit, and a direct next step.
  */
-const engagementHighlights = [
+const audienceHighlights = [
   {
     description:
-      "Part-time senior technical leadership for delivery pressure, team design, and AI direction.",
-    title: "Fractional engineering leadership",
+      "You need reliable technical execution without agency overhead. I can help build your web presence, improve lead flow, and set up systems your team can maintain.",
+    title: "Small businesses",
   },
   {
     description:
-      "Time-boxed implementation for a practical AI workflow or feature that needs to ship.",
-    title: "AI delivery sprint",
-  },
-  {
-    description:
-      "Operational systems, internal tools, and analytics that reduce manual drag.",
-    title: "Automation and instrumentation",
+      "You need focused help on a high-priority initiative. I can step in for a scoped engagement and help you move from idea to production quickly.",
+    title: "Startups",
   },
 ];
 ---
@@ -28,7 +23,7 @@ const engagementHighlights = [
 <section class="overflow-hidden py-20 md:py-28">
   <Container class="grid gap-10 lg:grid-cols-[1.2fr,0.8fr] lg:items-end">
     <div class="max-w-3xl">
-      <p class="eyebrow">Operator-led consulting</p>
+      <p class="eyebrow">Practical technical execution</p>
       <h1
         class="mt-5 text-5xl font-semibold tracking-tight text-text-primary md:text-6xl md:leading-[1.04]"
       >
@@ -37,7 +32,7 @@ const engagementHighlights = [
       <p
         class="mt-6 max-w-2xl text-lg leading-8 text-text-secondary md:text-xl"
       >
-        {siteConfig.description}
+        {siteConfig.descriptor}
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
@@ -48,22 +43,26 @@ const engagementHighlights = [
         >
           {siteConfig.primaryCta.label}
         </ButtonLink>
-        <ButtonLink
-          analyticsEvent={siteConfig.secondaryCta.analyticsEvent}
-          analyticsLocation="hero"
-          href={siteConfig.secondaryCta.href}
-          variant="secondary"
-        >
-          {siteConfig.secondaryCta.label}
-        </ButtonLink>
+        {
+          siteConfig.hasSchedulingCta && (
+            <ButtonLink
+              analyticsEvent={siteConfig.secondaryCta.analyticsEvent}
+              analyticsLocation="hero"
+              href={siteConfig.secondaryCta.href}
+              variant="secondary"
+            >
+              {siteConfig.secondaryCta.label}
+            </ButtonLink>
+          )
+        }
       </div>
     </div>
 
     <aside class="panel">
-      <p class="eyebrow">What engagements look like</p>
-      <div class="mt-6 space-y-6">
+      <p class="eyebrow">Who I work with</p>
+      <div class="mt-5 space-y-6">
         {
-          engagementHighlights.map((highlight) => (
+          audienceHighlights.map((highlight) => (
             <div class="border-t border-border pt-4 first:border-t-0 first:pt-0">
               <h2 class="text-lg font-semibold tracking-tight text-text-primary">
                 {highlight.title}

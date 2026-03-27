@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
 
-import ButtonLink from "../ui/ButtonLink.astro";
 import Container from "../ui/Container.astro";
 import SectionIntro from "../ui/SectionIntro.astro";
 import ServiceCard from "../ui/ServiceCard.astro";
@@ -19,24 +18,17 @@ const { services } = Astro.props as Props;
 <section class="py-18 md:py-22">
   <Container>
     <SectionIntro
-      description="Short, focused engagements that reduce delivery noise, ship practical systems, and leave a usable operating model behind."
+      description="A quick scan of the five offers I use most often. Each one is scoped to solve a real problem, ship cleanly, and leave a working handoff behind."
       eyebrow="Services"
-      title="Focused offers for teams with a concrete constraint to solve"
+      title="Five practical ways I help teams ship"
     />
 
-    <div class="mt-10 grid gap-6 lg:grid-cols-2">
-      {services.map((service) => <ServiceCard service={service} />)}
-    </div>
-
-    <div class="mt-8 flex justify-start">
-      <ButtonLink
-        analyticsEvent="cta_click"
-        analyticsLocation="services-section"
-        href="/services/"
-        variant="secondary"
-      >
-        View all services
-      </ButtonLink>
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {
+        services.map((service) => (
+          <ServiceCard compact={true} service={service} />
+        ))
+      }
     </div>
   </Container>
 </section>

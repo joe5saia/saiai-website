@@ -12,6 +12,7 @@ import Container from "../../components/ui/Container.astro";
 import FAQItem from "../../components/ui/FAQItem.astro";
 import FinalCTASection from "../../components/sections/FinalCTASection.astro";
 import TagList from "../../components/ui/TagList.astro";
+import { siteConfig } from "../../config/site";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { buildContactPath } from "../../lib/forms";
 import {
@@ -77,21 +78,35 @@ const contactPath = buildContactPath(service.data.title);
           </p>
 
           <div class="mt-8 flex flex-wrap gap-3">
-            <ButtonLink
-              analyticsEvent="cta_click"
-              analyticsLocation="service-hero"
-              href={contactPath}
-            >
-              Discuss this service
-            </ButtonLink>
-            <ButtonLink
-              analyticsEvent="cta_click"
-              analyticsLocation="service-hero"
-              href="/case-studies/"
-              variant="secondary"
-            >
-              View case studies
-            </ButtonLink>
+            {
+              siteConfig.hasSchedulingCta ? (
+                <>
+                  <ButtonLink
+                    analyticsEvent={siteConfig.primaryCta.analyticsEvent}
+                    analyticsLocation="service-hero"
+                    href={siteConfig.primaryCta.href}
+                  >
+                    {siteConfig.primaryCta.label}
+                  </ButtonLink>
+                  <ButtonLink
+                    analyticsEvent="cta_click"
+                    analyticsLocation="service-hero"
+                    href={contactPath}
+                    variant="secondary"
+                  >
+                    {siteConfig.secondaryCta.label}
+                  </ButtonLink>
+                </>
+              ) : (
+                <ButtonLink
+                  analyticsEvent="cta_click"
+                  analyticsLocation="service-hero"
+                  href={contactPath}
+                >
+                  {siteConfig.secondaryCta.label}
+                </ButtonLink>
+              )
+            }
           </div>
         </div>
 
@@ -121,7 +136,7 @@ const contactPath = buildContactPath(service.data.title);
     <Container>
       <div class="grid gap-6 lg:grid-cols-2">
         <article class="panel">
-          <p class="eyebrow">Problem statement</p>
+          <p class="eyebrow">Problems this solves</p>
           <ul class="mt-6 space-y-4 text-base leading-7 text-text-secondary">
             {
               service.data.problems.map((problem) => (
@@ -138,7 +153,7 @@ const contactPath = buildContactPath(service.data.title);
         </article>
 
         <article class="panel">
-          <p class="eyebrow">What SAIAI does</p>
+          <p class="eyebrow">What I do</p>
           <ul class="mt-6 space-y-4 text-base leading-7 text-text-secondary">
             {
               service.data.whatWeDo.map((item) => (
@@ -172,7 +187,7 @@ const contactPath = buildContactPath(service.data.title);
         </article>
 
         <article class="panel">
-          <p class="eyebrow">Ideal client</p>
+          <p class="eyebrow">Who this is for</p>
           <p class="mt-6 text-base leading-7 text-text-secondary">
             {service.data.audience}
           </p>
@@ -198,7 +213,7 @@ const contactPath = buildContactPath(service.data.title);
             <div class="max-w-3xl">
               <p class="eyebrow">FAQ</p>
               <h2 class="mt-4 text-3xl font-semibold tracking-tight text-text-primary">
-                Questions prospects usually ask before starting
+                Questions that usually come up before we start
               </h2>
             </div>
             <div class="mt-8 space-y-4">
@@ -213,7 +228,7 @@ const contactPath = buildContactPath(service.data.title);
   </section>
 
   <FinalCTASection
-    description={`If ${service.data.title.toLowerCase()} looks like the right fit, send a short brief and SAIAI can recommend the right engagement shape.`}
+    description={`If ${service.data.title.toLowerCase()} looks like the right fit, send a short brief and I'll recommend the best next step.`}
     title={`Want help with ${service.data.title.toLowerCase()}?`}
   />
 </BaseLayout>

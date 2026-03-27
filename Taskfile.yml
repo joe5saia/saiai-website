@@ -25,6 +25,10 @@ tasks:
     desc: Run unit tests
     cmd: npm run test
 
+  test-perf:
+    desc: Run Lighthouse locally against a production preview build
+    cmd: npm run test:perf
+
   format:
     desc: Format the codebase with Prettier
     cmd: npm run format

@@ -3,7 +3,7 @@
  * Site header with primary navigation and persistent CTA (§5.3).
  *
  * Navigation items: Home, Services, Case Studies, About, Contact.
- * Persistent CTA: "Book Intro Call".
+ * Persistent CTA: schedule a call when available, otherwise contact.
  */
 import ButtonLink from "../ui/ButtonLink.astro";
 import Container from "../ui/Container.astro";
@@ -35,7 +35,7 @@ function isActiveLink(href: string): boolean {
     <a class="flex flex-col gap-1" href="/">
       <span class="eyebrow text-text-primary">{siteConfig.name}</span>
       <span class="text-sm font-medium text-text-secondary"
-        >Applied AI & engineering systems</span
+        >Websites, systems, and AI workflows</span
       >
     </a>
 

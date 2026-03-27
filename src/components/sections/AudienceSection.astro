@@ -1,0 +1,40 @@
+---
+import Container from "../ui/Container.astro";
+import SectionIntro from "../ui/SectionIntro.astro";
+
+const audienceCards = [
+  {
+    title: "Small businesses",
+    body: "You need reliable technical execution without agency overhead. I can help build your web presence, improve lead flow, and set up systems your team can maintain.",
+  },
+  {
+    title: "Startups",
+    body: "You need focused help on a high-priority initiative. I can step in for a scoped engagement and help you move from idea to production quickly.",
+  },
+];
+---
+
+<section class="py-18 md:py-22">
+  <Container>
+    <SectionIntro
+      description="Most projects start with one practical need: launch something important, clean up a broken workflow, or get a system into a shape the team can actually use."
+      eyebrow="Who I work with"
+      title="Built for small businesses and startups that need execution, not overhead"
+    />
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        audienceCards.map((card) => (
+          <article class="panel">
+            <h3 class="text-2xl font-semibold tracking-tight text-text-primary">
+              {card.title}
+            </h3>
+            <p class="mt-4 text-base leading-7 text-text-secondary">
+              {card.body}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </Container>
+</section>

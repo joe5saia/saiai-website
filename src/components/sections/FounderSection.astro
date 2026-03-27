@@ -7,10 +7,10 @@ import { siteConfig } from "../../config/site";
  * Founder credibility block used on the homepage.
  */
 const founderPrinciples = [
-  "Direct collaboration with the consultant doing the work",
-  "Technical depth without hype-heavy positioning",
-  "Clear scopes, written recommendations, and implementation follow-through",
-  "Comfort across engineering, analytics, operations, and AI workflow design",
+  "I work directly with clients instead of routing projects through layers of account management.",
+  "I stay comfortable across websites, systems, reporting, operations, and AI workflow design.",
+  "I prefer scoped builds, written decisions, and clean handoffs over vague advisory work.",
+  "I bring startup experience across zero-to-one work, which helps when projects cross disciplines.",
 ];
 ---
 
@@ -18,22 +18,23 @@ const founderPrinciples = [
   <Container>
     <div class="grid gap-8 lg:grid-cols-[0.9fr,1.1fr]">
       <div class="max-w-xl">
-        <p class="eyebrow">Founder</p>
+        <p class="eyebrow">About the work</p>
         <h2
           class="mt-4 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl"
         >
-          Founder credibility without turning the site into a personal resume
+          A broad technical background is useful when the project does not fit
+          one neat box
         </h2>
         <p class="mt-5 text-base leading-7 text-text-secondary">
-          SAIAI is led by {siteConfig.founder.name}, who works directly with
-          clients on scoping, implementation, and handoff. The value of the
-          engagement comes from solving the problem in front of the team, not
-          from stacking layers of account management around it.
+          I'm {siteConfig.founder.name}, and I work directly with clients on
+          scoping, implementation, launch, and handoff. The point is to solve
+          the problem in front of the team, not to create a layer of consulting
+          theater around it.
         </p>
         <p class="mt-5 text-base leading-7 text-text-secondary">
-          If you want a broader background, <a
-            href={siteConfig.founder.personalSite}>Joe’s professional site</a
-          > is available. SAIAI stays focused on what the company helps clients do.
+          My background spans zero-to-one startup work across engineering,
+          product, analytics, and operations. If you want the longer version,
+          <a href={siteConfig.founder.personalSite}> my personal site</a> has it.
         </p>
 
         <div class="mt-8">
@@ -43,13 +44,13 @@ const founderPrinciples = [
             href="/about/"
             variant="secondary"
           >
-            Learn about SAIAI
+            Learn more about how I work
           </ButtonLink>
         </div>
       </div>
 
       <div class="panel">
-        <p class="eyebrow">Why this structure works</p>
+        <p class="eyebrow">Why this works well</p>
         <ul class="mt-6 space-y-4 text-base leading-7 text-text-secondary">
           {
             founderPrinciples.map((principle) => (

@@ -17,10 +17,10 @@ export interface ContactFormOptions {
 }
 
 export const budgetBandOptions = [
-  "Under $10k",
-  "$10k–$25k",
-  "$25k–$50k",
-  "$50k+",
+  "Under $2,500",
+  "$2,500 - $5,000",
+  "$5,000 - $10,000",
+  "$10,000+",
 ] as const;
 
 export const timelineOptions = [
