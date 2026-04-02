@@ -1,5 +1,6 @@
 # build output
 dist/
+output/
 output/lighthouse/
 # generated types
 .astro/
@@ -24,3 +25,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local browser tooling state
+.playwright-cli/
